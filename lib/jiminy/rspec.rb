@@ -1,0 +1,1 @@
+require "jiminy/recording/rspec"

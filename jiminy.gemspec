@@ -31,8 +31,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem
-  spec.add_runtime_dependency "prosopite"
   spec.add_runtime_dependency "octokit"
+  spec.add_runtime_dependency "prosopite"
+  spec.add_runtime_dependency "rails"
 
   spec.add_development_dependency "rubocop"
   spec.add_development_dependency "rubocop-rspec"
