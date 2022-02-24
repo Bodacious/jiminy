@@ -1,4 +1,4 @@
-module NPlusOneReporting
+module Jiminy
   module GithubAPIable
     require "octokit"
 

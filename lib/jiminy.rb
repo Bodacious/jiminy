@@ -1,22 +1,16 @@
 # frozen_string_literal: true
 
 require_relative "jiminy/version"
-require_relative "jiminy/configuration"
-require "jiminy/recording/tmp_file_recorder"
-require "jiminy/reporting"
+require_relative "jiminy/setup"
+require_relative "jiminy/cli"
+if defined?(Rails)
+  require_relative "jiminy/recording"
+end
 
 module Jiminy
   module_function
 
   def reset_results_file!
     Jiminy::Recording::TmpFileRecorder.reset_results_file!
-  end
-
-  def configuration
-    @_configuration ||= Configuration.new
-  end
-
-  def config
-    configuration
   end
 end

@@ -23,20 +23,17 @@ Gem::Specification.new do |spec|
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject do |f|
-      (f == __FILE__) || f.match(%r{\A(?:(?:spec)/|\.(?:git|circleci))})
+      (f == __FILE__) || f.match(%r{\A(?:(?:spec|exe)/|\.(?:git|circleci))})
     end
   end
   spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
-
-  # Uncomment to register a new dependency of your gem
-  spec.add_runtime_dependency "octokit"
-  spec.add_runtime_dependency "prosopite"
-  spec.add_runtime_dependency "rails"
-
-  spec.add_development_dependency "rubocop"
-  spec.add_development_dependency "rubocop-rspec"
-  # For more information and examples about making a new gem, checkout our
-  # guide at: https://bundler.io/guides/creating_gem.html
+  spec.licenses = "MIT"
+  spec.add_runtime_dependency "octokit", ">= 4", "< 5"
+  spec.add_runtime_dependency "prosopite", ">= 1", "< 2"
+  spec.add_runtime_dependency "rails", ">= 5", "< 7.2"
+  spec.add_runtime_dependency "thor", ">= 1.2", "< 2"
+  spec.add_development_dependency "rubocop", ">= 1", "< 2"
+  spec.add_development_dependency "rubocop-rspec", ">= 2", "< 3"
 end

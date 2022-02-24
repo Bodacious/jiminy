@@ -1,4 +1,4 @@
-module NPlusOneReporting
+module Jiminy
   class GithubCommenter
     require "jiminy/github_apiable"
 

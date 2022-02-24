@@ -1,10 +1,16 @@
-module CircleCI
-  class Job < Base
+module Jiminy
+  module Reporting
+    module CIProviders
+      module CircleCI
+        class Job < Base
 
-    define_attribute_readers :job_number
+          define_attribute_readers :job_number
 
-    def self.all(workflow_id:)
-      fetch_api_resource("workflow/#{workflow_id}/job")
+          def self.all(workflow_id:)
+            fetch_api_resource("workflow/#{workflow_id}/job")
+          end
+        end
+      end
     end
   end
 end

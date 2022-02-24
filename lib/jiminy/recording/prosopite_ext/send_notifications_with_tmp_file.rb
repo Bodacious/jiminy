@@ -1,7 +1,7 @@
 module Jiminy
   module Recording
     module ProsopiteExt
-      require "jiminy/recording/tmp_file_recorder"
+      require_relative "../tmp_file_recorder"
 
       module SendNotificationsWithTmpFile
         def prepare_results_file!

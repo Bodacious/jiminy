@@ -1,4 +1,4 @@
-module NPlusOneReporting
+module Jiminy
   class YAMLFileInstancePresenter
     require "open-uri"
     require "yaml"
