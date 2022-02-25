@@ -3,3 +3,5 @@
 require_relative "configuration"
 
 Jiminy.extend(Jiminy::ConfigurationMethods)
+
+load "./config/initializers/jiminy.rb"
