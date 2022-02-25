@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jiminy
   module Reporting
     class NPlusOne
@@ -6,7 +8,7 @@ module Jiminy
       # https://docs.ruby-lang.org/en/2.3.0/ERB.html#method-c-new
       ERB_SAFE_LEVEL = nil
 
-      TRIM_MODE = "-".freeze
+      TRIM_MODE = "-"
 
       attr_reader :file, :line, :method, :examples
 

@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject do |f|
-      (f == __FILE__) || f.match(%r{\A(?:(?:spec|exe)/|\.(?:git|circleci))})
+      (f == __FILE__) || f.match(%r{\A(?:(?:spec)/|\.(?:git|circleci))})
     end
   end
   spec.bindir        = "exe"
@@ -36,6 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "thor", ">= 1.2", "< 2"
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "rubocop", ">= 1", "< 2"
+  spec.add_development_dependency "rubocop-rake", ">= 0.6.0", "< 1"
   spec.add_development_dependency "rubocop-rspec", ">= 2", "< 3"
   spec.metadata["rubygems_mfa_required"] = "true"
 end

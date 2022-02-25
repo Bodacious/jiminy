@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Jiminy
   module Recording
-    abort("Jiminy::Recording must be run from a Rails app")
+    abort("Jiminy::Recording must be run from a Rails app") unless defined?(Rails)
 
     module_function
 

@@ -1,6 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "configuration"
-module Jiminy
-  module Setup
-    Jiminy.extend(ConfigurationMethods)
-  end
-end
+
+Jiminy.extend(Jiminy::ConfigurationMethods)

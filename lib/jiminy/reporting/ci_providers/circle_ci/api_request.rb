@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 module Jiminy
   module Reporting
     module CIProviders
       module CircleCI
         class APIRequest
-          API_BASE = "https://circleci.com/api/v2/".freeze
+          API_BASE = "https://circleci.com/api/v2/"
 
-          CIRCLE_TOKEN_HEADER = "Circle-Token".freeze
+          CIRCLE_TOKEN_HEADER = "Circle-Token"
 
           def initialize(path)
             @url = URI.join(API_BASE, path)

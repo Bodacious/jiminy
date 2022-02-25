@@ -6,4 +6,6 @@ require "jiminy/setup"
 require "jiminy/cli"
 require "jiminy/reporting"
 
+load "./config/initializers/jiminy.rb"
+
 Jiminy::CLI.start

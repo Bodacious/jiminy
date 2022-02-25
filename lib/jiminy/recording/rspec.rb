@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jiminy
   module Recording
     require "jiminy/recording/prosopite_ext/send_notifications_with_tmp_file"

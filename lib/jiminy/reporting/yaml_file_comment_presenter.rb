@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jiminy
   module Reporting
     class YAMLFileCommentPresenter
@@ -9,7 +11,7 @@ module Jiminy
 
       include GithubAPIable
 
-      INSTANCE_SEPARATOR = "\n".freeze
+      INSTANCE_SEPARATOR = "\n"
 
       def initialize(source_filepath:, pr_number:)
         @source_filepath = source_filepath

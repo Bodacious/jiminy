@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jiminy
   module Reporting
     module CIProviders
@@ -28,13 +30,11 @@ module Jiminy
 
           def self.fetch_api_resource(path)
             response = APIRequest.new(path).perform!
-            if response.is_a?(Net::HTTPOK)
-              json_body = JSON.parse(response.read_body)
-              self.next_token = json_body["next_page_token"]
-              json_body["items"].map { |attributes| new(attributes) }
-            else
-              raise "Error response: #{response.body}"
-            end
+            raise "Error response: #{response.body}" unless response.is_a?(Net::HTTPOK)
+
+            json_body = JSON.parse(response.read_body)
+            self.next_token = json_body["next_page_token"]
+            json_body["items"].map { |attributes| new(attributes) }
           end
 
           def initialize(attributes = {})

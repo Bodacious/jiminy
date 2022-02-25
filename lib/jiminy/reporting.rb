@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jiminy
   module Reporting
     require_relative "reporting/n_plus_one"
@@ -10,7 +12,7 @@ module Jiminy
 
     COMMENT_HEADER = ERB.new(File.read(File.join(TEMPLATES_DIR, "comment_header.md.erb"))).result.freeze
 
-    LINE_SEPARATOR = "\n".freeze
+    LINE_SEPARATOR = "\n"
 
     module_function
 

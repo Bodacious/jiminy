@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Jiminy
   module Recording
     module ProsopiteExt
@@ -18,14 +20,16 @@ module Jiminy
 
         def send_notifications
           super
-          if Prosopite.tmp_file
-            tc[:prosopite_notifications].each do |queries, backtrace|
-              absolute_location = backtrace.detect { |path| path.exclude?(Bundler.bundle_path.to_s) }
-              next unless absolute_location
 
-              relative_location = absolute_location.gsub("#{Rails.root.realpath}/", "")
-              tmp_file_recorder.record(location: relative_location, queries: queries)
-            end
+          return unless Prosopite.tmp_file
+
+          # https://github.com/charkost/prosopite/blob/main/lib/prosopite.rb#L157
+          tc[:prosopite_notifications].each do |queries, backtrace|
+            absolute_location = backtrace.detect { |path| path.exclude?(Bundler.bundle_path.to_s) }
+            next unless absolute_location
+
+            relative_location = absolute_location.gsub("#{Rails.root.realpath}/", "")
+            tmp_file_recorder.record(location: relative_location, queries: queries)
           end
         end
 

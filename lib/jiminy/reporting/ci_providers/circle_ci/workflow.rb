@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 module Jiminy
   module Reporting
     module CIProviders
       module CircleCI
         class Workflow < Base
           # Link to states: https://circleci.com/docs/2.0/workflows/#states
-          SUCCESS = "success".freeze
-          FAILED = "failed".freeze
-          NOT_RUN = "not run".freeze
-          RUNNING = "running".freeze
+          SUCCESS = "success"
+          FAILED = "failed"
+          NOT_RUN = "not run"
+          RUNNING = "running"
 
           define_attribute_readers :id, :name, :status
 
