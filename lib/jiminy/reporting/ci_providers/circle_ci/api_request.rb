@@ -3,9 +3,9 @@ module Jiminy
     module CIProviders
       module CircleCI
         class APIRequest
-          attr_reader :url
-
           API_BASE = "https://circleci.com/api/v2/".freeze
+
+          CIRCLE_TOKEN_HEADER = "Circle-Token".freeze
 
           def initialize(path)
             @url = URI.join(API_BASE, path)
@@ -17,13 +17,15 @@ module Jiminy
 
           private
 
+            attr_reader :url
+
             def response
               @_response ||= http.request(request)
             end
 
             def request
               @_request ||= Net::HTTP::Get.new(url).tap do |req|
-                req["Circle-Token"] = Jiminy.config.circle_ci_api_token
+                req[CIRCLE_TOKEN_HEADER] = Jiminy.config.circle_ci_api_token
               end
             end
 

@@ -1,6 +1,9 @@
 module Jiminy
   class Configuration
-    attr_accessor :circle_ci_api_token,
+    attr_accessor :ci_workflow_name,
+                  :circle_ci_api_token,
+                  :project_username,
+                  :project_reponame,
                   :repo_path,
                   :github_token
 
@@ -23,6 +26,10 @@ module Jiminy
 
     def vc_platform
       :github
+    end
+
+    def repo_path
+      [project_username, project_reponame].join("/")
     end
   end
 

@@ -11,6 +11,6 @@ module Jiminy
   module_function
 
   def reset_results_file!
-    Jiminy::Recording::TmpFileRecorder.reset_results_file!
+    Jiminy::Recording.reset_results_file!
   end
 end

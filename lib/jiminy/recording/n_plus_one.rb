@@ -3,11 +3,11 @@ module Jiminy
     class NPlusOne
       attr_reader :file, :location
 
-      LOCATION_MATCHER = /(?<file>.+\.rb):
+      LOCATION_MATCHER = %r{(?<file>.+\.rb):
         (?<line>\d+):in\s`
         (?:block\sin\s)?
         (?<method_name>.+)'
-      /x.freeze
+      }x.freeze
 
       EXAMPLES_COUNT = 3
 

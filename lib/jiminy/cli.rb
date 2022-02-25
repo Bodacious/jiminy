@@ -1,5 +1,6 @@
 module Jiminy
   require "thor"
+  require "byebug"
   class CLI < Thor
     require "jiminy/reporting/ci_providers/circle_ci"
     include Jiminy::Reporting::CIProviders
@@ -9,9 +10,7 @@ module Jiminy
     method_option :dry_run, type: :boolean, default: false, lazy_default: true
     def report
       pipeline = CircleCI::Pipeline.find_by_revision(options[:commit])
-      $stdout.puts "Polling circleCI API..."
-
-      workflow = CircleCI::Workflow.find(pipeline_id: pipeline.id, workflow_name: "build_and_test")
+      workflow = CircleCI::Workflow.find(pipeline_id: pipeline.id, workflow_name: Jiminy.config.ci_workflow_name)
       if workflow.not_run? || workflow.running?
         $stdout.puts "Workflow still running... check again"
         exit(2)
@@ -22,13 +21,16 @@ module Jiminy
       end
 
       jobs = CircleCI::Job.all(workflow_id: workflow.id)
+      # debugger
+      puts jobs.first.inspect
       artifacts = CircleCI::Artifact.all(job_number: jobs.first.job_number)
+      puts artifacts.first.inspect
       Jiminy::Reporting.report!(*artifacts.map(&:url),
         pr_number: options[:pr_number],
         dry_run: options[:dry_run]
       )
-      puts "Reported N+1s successfully"
 
+      $stdout.puts "Reported N+1s successfully"
       exit(0)
     end
   end
