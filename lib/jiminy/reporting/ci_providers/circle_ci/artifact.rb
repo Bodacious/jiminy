@@ -7,7 +7,7 @@ module Jiminy
           define_attribute_readers :url
 
           def self.all(job_number:)
-            fetch_api_resource("project/gh/cookpad/N-1-Reporter/#{job_number}/artifacts")
+            fetch_api_resource("project/gh/#{Jiminy.config.repo_path}/#{job_number}/artifacts")
           end
         end
       end

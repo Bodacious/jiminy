@@ -16,6 +16,22 @@ module Jiminy
             collection = fetch_api_resource(url)
             collection.detect { |w| w.name.to_s == workflow_name.to_s }
           end
+
+          def success?
+            status == SUCCESS
+          end
+
+          def running?
+            status == RUNNING
+          end
+
+          def not_run?
+            status == NOT_RUN
+          end
+
+          def failed?
+            status == FAILED
+          end
         end
       end
     end

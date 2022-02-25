@@ -1,24 +1,25 @@
 module Jiminy
-  class GithubCommenter
-    require "jiminy/github_apiable"
+  module Reporting
+    require_relative "reporter_base"
+    class GithubCommenter < ReporterBase
+      require "jiminy/github_apiable"
 
-    include GithubAPIable
+      include GithubAPIable
 
-    attr_reader :header, :body
-
-    def initialize(header:, body:)
-      @header = header
-      @body   = body
-    end
-
-    def report!
-      client.add_comment(env_config.repo_path, env_config.pr_number, comment_body)
-    end
-
-    private
-
-      def comment_body
-        "#{header}\n\n#{body}"
+      def initialize(header:, body:, pr_number:)
+        super(header: header, body: body)
+        @pr_number = pr_number
       end
+
+      def report!
+        client.add_comment(env_config.repo_path, pr_number, comment_body)
+      end
+
+      private
+
+        attr_reader :pr_number
+
+        alias comment_body report_body
+    end
   end
 end

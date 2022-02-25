@@ -1,32 +1,36 @@
 module Jiminy
   class Configuration
-    attr_writer :circle_ci_api_token
-    attr_writer :github_ref
-    attr_writer :temp_file_location
-    attr_writer :ignore_file_path
+    attr_accessor :circle_ci_api_token,
+                  :repo_path,
+                  :github_token
+
+    attr_writer :github_ref,
+                :ignore_file_path,
+                :dry_run,
+                :temp_file_location
 
     def temp_file_location
       @temp_file_location || Rails.root.join("tmp/jiminy/results.yml")
     end
 
     def ignore_file_path
-      @ignore_file_path || Rails.root.join("config/jiminy_ignores.yml")
+      @ignore_file_path || Rails.root.join(".jiminy_ignores.yml")
     end
 
-    def circle_ci_api_token
-      @circle_ci_api_token || ENV["CIRCLE_CI_API_TOKEN"]
+    def ci_test_platform
+      :circle_ci
     end
 
-    def github_repository
-      @github_repository || ENV["GITHUB_REPOSITORY"]
-    end
-
-    def github_ref
-      @github_ref || ENV["GITHUB_REF"].to_s.match(/refs\/pull\/(\d+)\//)[1]
+    def vc_platform
+      :github
     end
   end
 
   module ConfigurationMethods
+    def configure(&block)
+      block.call(configuration)
+    end
+
     def configuration
       @_configuration ||= Configuration.new
     end

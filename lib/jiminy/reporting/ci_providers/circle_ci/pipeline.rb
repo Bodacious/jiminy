@@ -11,9 +11,9 @@ module Jiminy
           define_attribute_readers :id, :project_slug, :vcs
 
           def self.find_by_revision(git_revision)
-            puts "GITHUB_SHA: #{Jiminy.config.git_commit}"
-            puts "GITHUB_REPOSITORY: #{Jiminy.config.github_repository}"
-            puts "CircleCI token present" if Jiminy.config.circle_ci_api_token.present?
+            puts "GITHUB_SHA: #{git_revision}"
+            puts "GITHUB_REPOSITORY: #{Jiminy.config.repo_path}"
+            puts "CircleCI token present" if Jiminy.config.circle_ci_api_token
             puts "RUBY version #{RUBY_VERSION}"
             attempt_count = 0
             matching_pipeline = nil

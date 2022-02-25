@@ -36,7 +36,7 @@ module Jiminy
             match_data[:reponame]
           end
 
-          def github_access_token
+          def github_token
             ensure_env_variable("GITHUB_TOKEN")
           end
 

@@ -2,53 +2,34 @@ module Jiminy
   require "thor"
   class CLI < Thor
     require "jiminy/reporting/ci_providers/circle_ci"
-
+    include Jiminy::Reporting::CIProviders
     desc "Report results", "Reports the results of tests"
-    method_option :commit, aliases: "-c"
+    method_option :commit, type: :string, aliases: "c", required: true
+    method_option :pr_number, type: :numeric, aliases: %w[pr p], required: true
+    method_option :dry_run, type: :boolean, default: false, lazy_default: true
     def report
-      puts Jiminy::Reporting::CIProviders::CircleCI::Pipeline.find_by_revision(options[:commit])
+      pipeline = CircleCI::Pipeline.find_by_revision(options[:commit])
+      $stdout.puts "Polling circleCI API..."
+
+      workflow = CircleCI::Workflow.find(pipeline_id: pipeline.id, workflow_name: "build_and_test")
+      if workflow.not_run? || workflow.running?
+        $stdout.puts "Workflow still running... check again"
+        exit(2)
+      end
+
+      unless workflow.success?
+        abort("Workflow #{workflow.status}—aborting...")
+      end
+
+      jobs = CircleCI::Job.all(workflow_id: workflow.id)
+      artifacts = CircleCI::Artifact.all(job_number: jobs.first.job_number)
+      Jiminy::Reporting.report!(*artifacts.map(&:url),
+        pr_number: options[:pr_number],
+        dry_run: options[:dry_run]
+      )
+      puts "Reported N+1s successfully"
+
       exit(0)
     end
   end
 end
-
-
-
-# PIPELINE = Pipeline.find_by_revision(ARGV[0])
-
-# def report_failure
-#   puts "Workflow failed. Aborting..."
-#   exit(1)
-# end
-
-# def report_n_plus_ones_to_github(workflow)
-#   jobs = CircleCI::Job.all(workflow_id: workflow.id)
-#   artifacts = CircleCI::Artifact.all(job_number: jobs.first.job_number)
-#   Jiminy.report! *artifacts.map(&:url)
-#   puts "Reported N+1s successfully"
-#   exit(0)
-# end
-
-# def report_unknown_status_failure(status)
-#   puts "Workflow failed. Unknown status #{status}"
-#   exit(1)
-# end
-
-# def poll_circle_ci_API!
-#   puts "Polling circleCI API..."
-
-#   workflow = CircleCI::Workflow.find(pipeline_id: PIPELINE.id, workflow_name: "build_and_test")
-#   case workflow.status
-#   when CircleCI::Workflow::RUNNING, CircleCI::Workflow::NOT_RUN
-#     sleep(WAIT_TIME)
-#     poll_circle_ci_API!
-#   when CircleCI::Workflow::FAILED
-#     report_failure
-#   when CircleCI::Workflow::SUCCESS
-#     report_n_plus_ones_to_github(workflow)
-#   else
-#     report_unknown_status_failure(workflow.status)
-#   end
-# end
-
-# poll_circle_ci_API!

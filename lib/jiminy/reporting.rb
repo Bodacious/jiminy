@@ -1,23 +1,28 @@
 module Jiminy
   module Reporting
     require_relative "reporting/n_plus_one"
-    require_relative "reporting/yaml_file_instance_presenter"
-    require_relative "reporting/github_commenter"
+    require_relative "reporting/yaml_file_comment_presenter"
     require_relative "reporting/ci_providers"
+    require_relative "reporting/dry_run_reporter"
+    require_relative "reporting/github_commenter"
 
-    COMMENT_HEADER = <<~MARKDOWN.freeze
-      It looks like the following changes might have introduced new N+1 queries.
-      Please investigate this issue before merging these changes into `main`.
+    TEMPLATES_DIR = File.expand_path("templates/reporting", __dir__).freeze
 
-      (You can ignore this issue by adding the file path to `config/n_plus_one_ignores.yml`)
+    COMMENT_HEADER = ERB.new(File.read(File.join(TEMPLATES_DIR, "comment_header.md.erb"))).result.freeze
 
-    MARKDOWN
+    LINE_SEPARATOR = "\n".freeze
 
     module_function
 
-    def report!(*yaml_files)
-      comment_content = yaml_files.map { |yaml_file| YAMLFileInstancePresenter.new(yaml_file).to_s }
-      GithubCommenter.new(header: COMMENT_HEADER, body: comment_content.join("\n")).report!
+    def report!(*yaml_files, **options)
+      comment_content = yaml_files.map do |yaml_file|
+        YAMLFileCommentPresenter.new(source_filepath: yaml_file, pr_number: options[:pr_number]).to_s
+      end.join(LINE_SEPARATOR)
+      if options[:dry_run]
+        DryRunReporter.new(header: COMMENT_HEADER, body: comment_content).report!
+      else
+        GithubCommenter.new(header: COMMENT_HEADER, body: comment_content, pr_number: options[:pr_number]).report!
+      end
     end
   end
 end

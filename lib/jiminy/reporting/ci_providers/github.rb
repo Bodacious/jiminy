@@ -7,11 +7,7 @@ module Jiminy
       module Github
         class Configuration < ProviderConfiguration
           def repo_path
-            ensure_configuration(:github_repository)
-          end
-
-          def pr_number
-            ensure_configuration(:pr_number)
+            ensure_configuration(:repo_path)
           end
 
           def project_username
@@ -22,8 +18,8 @@ module Jiminy
             repo_path.to_s.split("/").last
           end
 
-          def github_access_token
-            ensure_env_variable("GITHUB_TOKEN")
+          def github_token
+            ensure_configuration(:github_token)
           end
         end
       end
