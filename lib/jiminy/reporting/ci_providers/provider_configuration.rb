@@ -14,12 +14,12 @@ module Jiminy
 
         private
 
-          def ensure_configuration(name)
-            value = Jiminy.config.public_send(name)
-            return value unless value.empty?
+        def ensure_configuration(name)
+          value = Jiminy.config.public_send(name)
+          return value unless value.empty?
 
-            raise("Please provide a value for Jiminy.config.#{name}")
-          end
+          raise("Please provide a value for Jiminy.config.#{name}")
+        end
       end
     end
   end

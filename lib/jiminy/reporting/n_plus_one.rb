@@ -29,9 +29,9 @@ module Jiminy
 
       private
 
-        def markdown_template
-          @_markdown_template ||= File.read(File.join(TEMPLATES_DIR, "n_plus_one.md.erb"))
-        end
+      def markdown_template
+        @_markdown_template ||= File.read(File.join(TEMPLATES_DIR, "n_plus_one.md.erb"))
+      end
     end
   end
 end

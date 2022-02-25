@@ -3,11 +3,11 @@ module Jiminy
     class NPlusOne
       attr_reader :file, :location
 
-      LOCATION_MATCHER = %r{(?<file>.+\.rb):
+      LOCATION_MATCHER = /(?<file>.+\.rb):
         (?<line>\d+):in\s`
         (?:block\sin\s)?
         (?<method_name>.+)'
-      }x.freeze
+      /x.freeze
 
       EXAMPLES_COUNT = 3
 
@@ -33,16 +33,16 @@ module Jiminy
 
       private
 
-        attr_reader :queries, :line, :method_name
+      attr_reader :queries, :line, :method_name
 
-        def attributes
-          {
-            "file" => file,
-            "line" => line,
-            "method" => method_name,
-            "examples" => queries.take(EXAMPLES_COUNT)
-          }
-        end
+      def attributes
+        {
+          "file" => file,
+          "line" => line,
+          "method" => method_name,
+          "examples" => queries.take(EXAMPLES_COUNT)
+        }
+      end
     end
   end
 end

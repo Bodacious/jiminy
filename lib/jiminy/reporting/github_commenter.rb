@@ -17,9 +17,9 @@ module Jiminy
 
       private
 
-        attr_reader :pr_number
+      attr_reader :pr_number
 
-        alias comment_body report_body
+      alias comment_body report_body
     end
   end
 end

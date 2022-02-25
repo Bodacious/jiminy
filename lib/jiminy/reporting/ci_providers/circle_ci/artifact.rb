@@ -3,7 +3,6 @@ module Jiminy
     module CIProviders
       module CircleCI
         class Artifact < Base
-
           define_attribute_readers :url
 
           def self.all(job_number:)

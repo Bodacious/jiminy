@@ -16,9 +16,7 @@ module Jiminy
         exit(2)
       end
 
-      unless workflow.success?
-        abort("Workflow #{workflow.status}—aborting...")
-      end
+      abort("Workflow #{workflow.status}—aborting...") unless workflow.success?
 
       jobs = CircleCI::Job.all(workflow_id: workflow.id)
       # debugger
@@ -26,9 +24,8 @@ module Jiminy
       artifacts = CircleCI::Artifact.all(job_number: jobs.first.job_number)
       puts artifacts.first.inspect
       Jiminy::Reporting.report!(*artifacts.map(&:url),
-        pr_number: options[:pr_number],
-        dry_run: options[:dry_run]
-      )
+                                pr_number: options[:pr_number],
+                                dry_run: options[:dry_run])
 
       $stdout.puts "Reported N+1s successfully"
       exit(0)

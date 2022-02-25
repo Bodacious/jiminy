@@ -12,11 +12,11 @@ module Jiminy
 
       private
 
-        attr_reader :header, :body
+      attr_reader :header, :body
 
-        def report_body
-          "#{header}\n\n#{body}"
-        end
+      def report_body
+        "#{header}\n\n#{body}"
+      end
     end
   end
 end

@@ -17,24 +17,24 @@ module Jiminy
 
           private
 
-            attr_reader :url
+          attr_reader :url
 
-            def response
-              @_response ||= http.request(request)
-            end
+          def response
+            @_response ||= http.request(request)
+          end
 
-            def request
-              @_request ||= Net::HTTP::Get.new(url).tap do |req|
-                req[CIRCLE_TOKEN_HEADER] = Jiminy.config.circle_ci_api_token
-              end
+          def request
+            @_request ||= Net::HTTP::Get.new(url).tap do |req|
+              req[CIRCLE_TOKEN_HEADER] = Jiminy.config.circle_ci_api_token
             end
+          end
 
-            def http
-              @_http ||= Net::HTTP.new(url.host, url.port).tap do |http_instance|
-                http_instance.use_ssl = true
-                http_instance.verify_mode = OpenSSL::SSL::VERIFY_NONE
-              end
+          def http
+            @_http ||= Net::HTTP.new(url.host, url.port).tap do |http_instance|
+              http_instance.use_ssl = true
+              http_instance.verify_mode = OpenSSL::SSL::VERIFY_NONE
             end
+          end
         end
       end
     end

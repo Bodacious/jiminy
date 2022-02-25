@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "provider_configuration"
 
 module Jiminy

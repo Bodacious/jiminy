@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require_relative "provider_configuration"
 
 require_relative "circle_ci/base"
@@ -14,11 +15,11 @@ module Jiminy
     module CIProviders
       module CircleCI
         class Configuration < ProviderConfiguration
-          PR_URL_MATCHERS = /github\.com\/
-            (?<username>[\w\-_]+)\/
-            (?<reponame>[\w\-_]+)\/
-            pull\/
-            (?<pr_number>\d+)/x.freeze
+          PR_URL_MATCHERS = %r{github\.com/
+            (?<username>[\w\-_]+)/
+            (?<reponame>[\w\-_]+)/
+            pull/
+            (?<pr_number>\d+)}x.freeze
 
           def repo_path
             [project_username, project_reponame].join("/")
@@ -42,9 +43,9 @@ module Jiminy
 
           private
 
-            def match_data
-              @_match_data ||= ensure_env_variable("CIRCLE_PULL_REQUEST").match(PR_URL_MATCHERS)
-            end
+          def match_data
+            @_match_data ||= ensure_env_variable("CIRCLE_PULL_REQUEST").match(PR_URL_MATCHERS)
+          end
         end
       end
     end

@@ -18,12 +18,12 @@ module Jiminy
             end
           end
 
-          def self.next_token
-            @next_token
+          class << self
+            attr_reader :next_token
           end
 
-          def self.next_token=(value)
-            @next_token = value
+          class << self
+            attr_writer :next_token
           end
 
           def self.fetch_api_resource(path)

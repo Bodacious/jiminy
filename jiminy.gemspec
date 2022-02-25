@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = <<~STRING
     Wraps around your CI integration to detect and warn about n+1 queries before they're merged
   STRING
-  spec.homepage      = "https://github.com/cookpad/jiminy"
+  spec.homepage = "https://github.com/cookpad/jiminy"
   spec.required_ruby_version = ">= 2.6.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
@@ -37,4 +37,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "rubocop", ">= 1", "< 2"
   spec.add_development_dependency "rubocop-rspec", ">= 2", "< 3"
+  spec.metadata["rubygems_mfa_required"] = "true"
 end
