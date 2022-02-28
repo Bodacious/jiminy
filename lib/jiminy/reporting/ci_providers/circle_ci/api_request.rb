@@ -14,6 +14,7 @@ module Jiminy
           end
 
           def perform!
+            puts url
             response
           end
 

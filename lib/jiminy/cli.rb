@@ -7,12 +7,25 @@ module Jiminy
     require "jiminy/reporting/ci_providers/circle_ci"
     include Jiminy::Reporting::CIProviders
 
+    class WorkflowStillRunningError < StandardError; end
+    private_constant :WorkflowStillRunningError
+
+    MAX_TIMEOUT = 1800 # 1 hour
+    POLL_INTERVAL = 60 # 1 min
+
+    def self.exit_on_failure?
+      false
+    end
+
     desc "Report results", "Reports the results of tests"
     method_option :commit, type: :string, aliases: "c", required: true
     method_option :pr_number, type: :numeric, aliases: %w[pr p], required: true
     method_option :dry_run, type: :boolean, default: false, lazy_default: true
+    method_option :timeout, type: :numeric, aliases: %w[max-timeout], default: MAX_TIMEOUT
+    method_option :poll_interval, type: :numeric, aliases: %w[poll-interval], default: POLL_INTERVAL
     def report
-      artifact_urls = artifacts(options[:commit], options[:pr_number]).map(&:url)
+      self.start_time = Time.now
+      artifact_urls = artifacts.map(&:url)
 
       Jiminy::Reporting.report!(*artifact_urls,
                                 pr_number: options[:pr_number],
@@ -22,28 +35,68 @@ module Jiminy
       exit(0)
     end
 
-    def self.exit_on_failure?
-      false
-    end
-
+    # rubocop:disable Metrics/BlockLength
     no_tasks do
-      # rubocop:disable Metrics/AbcSize
-      def artifacts(git_revision, pr_number)
-        pipeline = CircleCI::Pipeline.find_by_revision(git_revision: git_revision, pr_number: pr_number)
-        pipeline or abort("No such Pipeline with commit #{commit}")
+      attr_accessor :start_time
 
-        workflow = CircleCI::Workflow.find(pipeline_id: pipeline.id, workflow_name: Jiminy.config.ci_workflow_name)
-        if workflow.not_run? || workflow.running?
-          $stdout.puts "Workflow still running... check again"
-          exit(2)
-        end
-
-        workflow.success? or abort("Workflow #{workflow.status}—aborting...")
-
-        jobs = CircleCI::Job.all(workflow_id: workflow.id)
-        CircleCI::Artifact.all(job_number: jobs.first.job_number)
+      def poll_interval
+        options[:poll_interval] || POLL_INTERVAL
       end
-      # rubocop:enable Metrics/AbcSize
+
+      def max_timeout
+        options[:timeout] || MAX_TIMEOUT
+      end
+
+      def timed_out?
+        (Time.now - start_time) > max_timeout
+      end
+
+      def git_revision
+        options[:commit]
+      end
+
+      def pr_number
+        options[:pr_number]
+      end
+
+      def pipeline
+        @_pipeline ||= CircleCI::Pipeline.find_by_revision(git_revision: git_revision, pr_number: pr_number) or
+          abort("No such Pipeline with commit SHA #{git_revision}")
+      end
+
+      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+      def workflow
+        @_workflow ||= begin
+          result = CircleCI::Workflow.find(pipeline_id: pipeline.id, workflow_name: Jiminy.config.ci_workflow_name)
+          if result.nil?
+            abort("Unable to find workflow called '#{Jiminy.config.ci_workflow_name}' in Pipeline #{pipeline.id}")
+          end
+
+          if result.not_run? || result.running?
+            $stdout.puts "Workflow still running..."
+            raise(WorkflowStillRunningError)
+          end
+          abort("Workflow #{result.status}—aborting...") unless result.success?
+
+          result
+        rescue WorkflowStillRunningError
+          sleep(poll_interval)
+          $stdout.puts "Retrying..."
+          retry unless timed_out?
+
+          abort("Process timed out after #{Time.now - start_time} seconds")
+        end
+      end
+      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+
+      def jobs
+        @_jobs ||= CircleCI::Job.all(workflow_id: workflow.id)
+      end
+
+      def artifacts
+        @_artifacts ||= CircleCI::Artifact.all(job_number: jobs.first.job_number)
+      end
     end
+    # rubocop:enable Metrics/BlockLength
   end
 end

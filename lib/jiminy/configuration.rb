@@ -34,7 +34,7 @@ module Jiminy
       end
     end
 
-    define_config :ci_workflow_name
+    define_config :ci_workflow_name, default: "build"
 
     define_config :circle_ci_api_token
 

@@ -8,7 +8,7 @@ module Jiminy
         require_relative "vcs"
 
         class Pipeline < Base
-          MAX_PAGE_LOOKUP = 10
+          MAX_PAGE_LOOKUP = 20
 
           define_attribute_readers :id, :project_slug, :vcs
 
@@ -20,9 +20,7 @@ module Jiminy
               matching_pipeline = page_pipelines.detect { |p| pipeline_match?(p, git_revision, pr_number) }
               attempt_count += 1
             end
-            return matching_pipeline if matching_pipeline
-
-            abort("Couldn't find matching pipeline")
+            matching_pipeline
           end
 
           def self.fetch_page_from_api(page_token)
