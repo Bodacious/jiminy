@@ -5,8 +5,7 @@ module Jiminy
     require_relative "reporting/n_plus_one"
     require_relative "reporting/yaml_file_comment_presenter"
     require_relative "reporting/ci_providers"
-    require_relative "reporting/dry_run_reporter"
-    require_relative "reporting/github_commenter"
+    require_relative "reporting/reporters"
 
     TEMPLATES_DIR = File.expand_path("templates/reporting", __dir__).freeze
 
@@ -23,9 +22,9 @@ module Jiminy
         YAMLFileCommentPresenter.new(source_filepath: yaml_file, pr_number: options[:pr_number]).to_s
       end.join(LINE_SEPARATOR)
       if options[:dry_run]
-        DryRunReporter.new(header: COMMENT_HEADER, body: comment_content).report!
+        Reporters::DryRunReporter.new(header: COMMENT_HEADER, body: comment_content).report!
       else
-        GithubCommenter.new(header: COMMENT_HEADER, body: comment_content, pr_number: options[:pr_number]).report!
+        Reporters::GithubReporter.new(header: COMMENT_HEADER, body: comment_content, pr_number: options[:pr_number]).report!
       end
     end
   end
