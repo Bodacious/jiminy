@@ -17,6 +17,8 @@ module Jiminy
     module_function
 
     def report!(*yaml_files, **options)
+      return if yaml_files.empty?
+
       comment_content = yaml_files.map do |yaml_file|
         YAMLFileCommentPresenter.new(source_filepath: yaml_file, pr_number: options[:pr_number]).to_s
       end.join(LINE_SEPARATOR)
