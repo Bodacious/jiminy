@@ -2,17 +2,21 @@
 
 ## Your external conscience when creating pull requests
 
-Jiminy wraps around your test suite and detects n+1 queries in your code. Once your test suite has run, these can be reported in GitHub PR comments.
+Jiminy wraps around your test suite and detects n+1 queries in your code.
+
+Once your test suite has run, these can be reported in GitHub PR comments.
 
 ## How it works
 
 Under the hood, Jiminy uses [Prosopite](https://github.com/charkost/prosopite) to detect N+1 queries.
 
-When running RSpec tests, Jiminy extends Prosopite to log the n+1 instances it detects to a temp file (by default, `tmp/jiminy/results`).
+When running RSpec tests, Jiminy extends Prosopite to log the n+1 instances it detects to a temp file (by default, `tmp/jiminy/results.yml`).
 
 Via a command-line interface, Jiminy will then report these n+1 queries by commenting in the related PR on GitHub.
 
 ## How it looks
+
+![How a Jiminy comment looks in a PR](./example.png)
 
 ## Assumptions
 
@@ -56,6 +60,29 @@ end
 bundle exec jiminy report --commit b4742289dDDD364fd983fd57787dda74134acbaf --dry-run --pr-number=2 --poll-interval=5 --timeout=20
 ```
 
+### CirleCI Config
+
+Make sure your CircleCI configuration saves the artifacts created when running your test suite:
+
+```yaml
+      - store_artifacts:
+          path: ./tmp/jiminy
+```
+
+### GitHub Actions
+
+Call the Jiminy CLI from a GitHub action:
+
+```yaml
+      - name: Report N+1 issues
+        env:
+          CIRCLE_CI_API_TOKEN: ${{ secrets.CIRCLE_CI_API_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.number }}
+
+        run: |
+          bundle exec jiminy report --commit ${{ github.event.pull_request.head.sha }} --pr-number=$PR_NUMBER --poll-interval=15 --timeout=300
+```
 
 ## Configuration
 
