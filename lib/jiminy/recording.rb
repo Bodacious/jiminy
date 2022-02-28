@@ -7,7 +7,7 @@ module Jiminy
     module_function
 
     def reset_results_file!
-      Rails.root.join(Jiminy.config.temp_file_location.dirname).mkpath
+      Rails.root.join(File.dirname(Jiminy.config.temp_file_location)).mkpath
       File.write(Jiminy.config.temp_file_location, [].to_yaml)
     end
   end
