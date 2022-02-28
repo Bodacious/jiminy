@@ -65,8 +65,10 @@ bundle exec jiminy report --commit b4742289dDDD364fd983fd57787dda74134acbaf --dr
 Make sure your CircleCI configuration saves the artifacts created when running your test suite:
 
 ```yaml
-      - store_artifacts:
-          path: ./tmp/jiminy
+# ...
+- store_artifacts:
+    path: ./tmp/jiminy
+# ...
 ```
 
 ### GitHub Actions
@@ -74,14 +76,14 @@ Make sure your CircleCI configuration saves the artifacts created when running y
 Call the Jiminy CLI from a GitHub action:
 
 ```yaml
-      - name: Report N+1 issues
-        env:
-          CIRCLE_CI_API_TOKEN: ${{ secrets.CIRCLE_CI_API_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_NUMBER: ${{ github.event.number }}
+- name: Report N+1 issues
+  env:
+  CIRCLE_CI_API_TOKEN: ${{ secrets.CIRCLE_CI_API_TOKEN }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    PR_NUMBER: ${{ github.event.number }}
 
-        run: |
-          bundle exec jiminy report --commit ${{ github.event.pull_request.head.sha }} --pr-number=$PR_NUMBER --poll-interval=15 --timeout=300
+  run: |
+    bundle exec jiminy report --commit ${{ github.event.pull_request.head.sha }} --pr-number=$PR_NUMBER --poll-interval=15 --timeout=300
 ```
 
 ## Configuration
