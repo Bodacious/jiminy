@@ -27,6 +27,34 @@ Jiminy is still pre-release. The current version assumes the following:
 - You are running your tests on CircleCI
 - Your code repository is on GitHub
 
+## Limitations
+
+Since Jiminy works (via Prosopite) by monitoring DB queries made by the application in test mode, it's possible that your code might introduce a new n+1 that isn't detected. This is more likely if your test setup doesn't create multiple records. For example:
+
+``` ruby
+# in your controller ...
+def index
+  @users = User.all
+  @users.each do |user|
+    user.profile.name
+  end
+end
+
+# in your test ...
+before do
+  @user = User.create(profile: Profile.new(name: "Profile name"))
+end
+
+it "loads the index" do
+  get :index
+  expect(response).to be_ok
+end
+```
+
+This controller code will likely result in n+1 records being loaded from the DB, but since only one record is created in the test setup this probably won't be detected.
+
+You can improve results by adding additional records in some of your test setups to better emulate a real-life scenario.
+
 ## Installation
 
 ### Installing the gem
@@ -123,7 +151,7 @@ You can do this by creating a file in your application's directory called `.jimi
 - app/controllers/application_controller.rb
 - app/models/user.rb
 # - etc.
-``
+```
 
 ## How to run the test suite
 
