@@ -91,6 +91,7 @@ Call the Jiminy CLI from a GitHub action:
 Add an initializer to your Rails initializers directory:
 
 ``` ruby
+# config/initializers/jiminy.rb
 Jiminy.configure do |config|
   config.ci_workflow_name = "build_and_test"
 
