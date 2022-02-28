@@ -19,17 +19,17 @@ module Jiminy
 
     desc "Report results", "Reports the results of tests"
     method_option :commit, type: :string, aliases: "c", required: true,
-                  banner: "3e078f8770743549b722382ec5d412a30b9fdcc5",
-                  desc: "The full SHA for the current HEAD commit"
+                           banner: "3e078f8770743549b722382ec5d412a30b9fdcc5",
+                           desc: "The full SHA for the current HEAD commit"
     method_option :pr_number, type: :numeric, aliases: %w[pr p], required: true,
-                  banner: "1",
-                  desc: "The GitHub PR number"
+                              banner: "1",
+                              desc: "The GitHub PR number"
     method_option :dry_run, type: :boolean, default: false, lazy_default: true,
-                  desc: "Print to STDOUT instead of leaving a comment on GitHub"
+                            desc: "Print to STDOUT instead of leaving a comment on GitHub"
     method_option :timeout, type: :numeric, aliases: %w[max-timeout], default: MAX_TIMEOUT,
-                  desc: "How long to poll CircleCI before timing out (in seconds)"
+                            desc: "How long to poll CircleCI before timing out (in seconds)"
     method_option :poll_interval, type: :numeric, aliases: %w[poll-interval], default: POLL_INTERVAL,
-                  desc: "How frequently to poll CircleCI (in seconds)"
+                                  desc: "How frequently to poll CircleCI (in seconds)"
     def report
       self.start_time = Time.now
       artifact_urls = artifacts.map(&:url)
