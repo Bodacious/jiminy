@@ -112,6 +112,18 @@ end
 
 _NOTE: This file must be named `config/initializers/jiminy.rb` or **the gem will not detect the configuration**._
 
+## Ignoring instances
+
+If you're adding Jiminy to an existing app, you might want to silence some of the existing warnings and focus on preventing new n+1s being introduced.
+
+You can do this by creating a file in your application's directory called `.jiminy_ignores.yml` and listing the files you wish to ignore:
+
+```yaml
+---
+- app/controllers/application_controller.rb
+- app/models/user.rb
+# - etc.
+``
 
 ## How to run the test suite
 
