@@ -36,19 +36,15 @@ module Jiminy
 
     define_config :ci_workflow_name
 
-    define_config :ci_test_platform, default: :circle_ci
-
-    define_config :vc_platform, default: :github
-
     define_config :circle_ci_api_token
-
-    define_config :project_username
-
-    define_config :project_reponame
 
     define_config :github_token
 
     define_config :ignore_file_path, default: File.join("./jiminy_ignores.yml")
+
+    define_config :project_reponame
+
+    define_config :project_username
 
     define_config :temp_file_location, default: File.join("./tmp/jiminy/results.yml")
 
@@ -77,8 +73,6 @@ module Jiminy
     end
 
     def raise_missing_required(config_name)
-      puts "Config name: #{config_name.inspect}"
-      puts "Required: #{required_configs.inspect}"
       return unless required_configs.key?(config_name)
 
       raise MissingConfigError, config_name
@@ -95,5 +89,9 @@ module Jiminy
     end
 
     alias config configuration
+
+    def configured?
+      !!configuration
+    end
   end
 end

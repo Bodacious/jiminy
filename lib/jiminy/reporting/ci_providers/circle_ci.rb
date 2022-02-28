@@ -14,6 +14,7 @@ module Jiminy
   module Reporting
     module CIProviders
       module CircleCI
+        # Not currently used, but kept for future use.
         class Configuration < ProviderConfiguration
           PR_URL_MATCHERS = %r{github\.com/
             (?<username>[\w\-_]+)/

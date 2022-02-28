@@ -4,7 +4,6 @@ module Jiminy
   module Reporting
     module CIProviders
       module CircleCI
-        require "ostruct"
         require_relative "api_request"
 
         class Base

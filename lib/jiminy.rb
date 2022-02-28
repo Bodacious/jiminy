@@ -2,7 +2,6 @@
 
 require_relative "jiminy/version"
 require_relative "jiminy/setup"
-require_relative "jiminy/cli"
 require_relative "jiminy/recording" if defined?(Rails)
 
 module Jiminy

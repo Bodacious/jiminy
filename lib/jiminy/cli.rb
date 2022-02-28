@@ -6,6 +6,7 @@ module Jiminy
   class CLI < Thor
     require "jiminy/reporting/ci_providers/circle_ci"
     include Jiminy::Reporting::CIProviders
+
     desc "Report results", "Reports the results of tests"
     method_option :commit, type: :string, aliases: "c", required: true
     method_option :pr_number, type: :numeric, aliases: %w[pr p], required: true
