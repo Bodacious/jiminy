@@ -7,12 +7,12 @@ Gem::Specification.new do |spec|
   spec.version       = Jiminy::VERSION
   spec.authors       = ["Bodacious"]
   spec.email         = ["gavin@gavinmorrice.com"]
-
+  spec.license       = "MIT"
   spec.summary       = "Detects N+1 queries in test suite and comments on Github PRs"
   spec.description   = <<~STRING
     Wraps around your CI integration to detect and warn about n+1 queries before they're merged
   STRING
-  spec.homepage = "https://github.com/cookpad/jiminy"
+  spec.homepage = "https://github.com/bodacious/jiminy"
   spec.required_ruby_version = ">= 2.6.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
-  spec.licenses = "MIT"
+
   spec.add_runtime_dependency "octokit", ">= 4", "< 5"
   spec.add_runtime_dependency "prosopite", ">= 1", "< 2"
   spec.add_runtime_dependency "rails", ">= 5", "< 7.2"
