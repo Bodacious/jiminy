@@ -10,6 +10,7 @@ module Jiminy
           yaml_content = File.read(Jiminy.config.temp_file_location)
           array = YAML.safe_load(yaml_content)
           n_plus_one = NPlusOne.new(location: location, queries: queries)
+
           array << n_plus_one.to_h unless location_in_array?(location, array) || filepath_ignored?(n_plus_one.file)
           File.write(Jiminy.config.temp_file_location, array.to_yaml)
         end

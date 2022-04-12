@@ -30,6 +30,8 @@ module Jiminy
                             desc: "How long to poll CircleCI before timing out (in seconds)"
     method_option :poll_interval, type: :numeric, aliases: %w[poll-interval], default: POLL_INTERVAL,
                                   desc: "How frequently to poll CircleCI (in seconds)"
+    method_option :source, type: :string, default: "circleci",
+                           desc: "Where are the results.yml files we should report?"
     def report
       self.start_time = Time.now
       artifact_urls = artifacts.map(&:url)
@@ -48,6 +50,10 @@ module Jiminy
 
       def poll_interval
         options[:poll_interval] || POLL_INTERVAL
+      end
+
+      def source
+        options[:source] || :circleci
       end
 
       def max_timeout
@@ -69,6 +75,13 @@ module Jiminy
       def pipeline
         @_pipeline ||= CircleCI::Pipeline.find_by_revision(git_revision: git_revision, pr_number: pr_number) or
           abort("No such Pipeline with commit SHA #{git_revision}")
+      end
+
+      def missing_options
+        [].tap do |array|
+          array.concat("--pr-number") unless pr_number
+          array.concat("--commit") unless git_revision
+        end
       end
 
       # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
@@ -101,8 +114,23 @@ module Jiminy
       end
 
       def artifacts
-        @_artifacts ||= CircleCI::Artifact.all(job_number: jobs.first.job_number)
+        @_artifacts ||= begin
+          unless respond_to?(:"artifacts_from_#{source}")
+            raise ArgumentError, "Uknown value for source option #{source}"
+          end
+
+          public_send(:"artifacts_from_#{source}")
+        end
       end
+
+      def artifacts_from_local
+        Local::Artifact.all
+      end
+
+      def artifacts_from_circle_ci
+        CircleCI::Artifact.all(job_number: jobs.first.job_number)
+      end
+      alias_method :artifacts_from_circleci, :artifacts_from_circle_ci
     end
     # rubocop:enable Metrics/BlockLength
   end

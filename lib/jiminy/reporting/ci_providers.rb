@@ -6,6 +6,7 @@ module Jiminy
       require_relative "ci_providers/provider_configuration"
       require_relative "ci_providers/circle_ci"
       require_relative "ci_providers/github"
+      require_relative "ci_providers/local"
     end
   end
 end
