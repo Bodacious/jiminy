@@ -132,7 +132,7 @@ Jiminy.configure do |config|
 
   config.github_token = ENV["GITHUB_TOKEN"]
 
-  # config.ignore_file_path =  File.join("./jiminy_ignores.yml")
+  # config.ignore_file_path =  File.join("./.jiminy_ignores.yml")
 
   # config.temp_file_location = File.join("./tmp/jiminy/results.yml")
 end
