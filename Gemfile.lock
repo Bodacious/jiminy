@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jiminy (0.1.0.pre1)
+    jiminy (0.1.0)
       octokit (>= 4, < 5)
       prosopite (>= 1, < 2)
       rails (>= 5, < 7.2)
