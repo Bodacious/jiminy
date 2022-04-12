@@ -10,8 +10,8 @@ module Jiminy
     class WorkflowStillRunningError < StandardError; end
     private_constant :WorkflowStillRunningError
 
-    MAX_TIMEOUT = 1800 # 1 hour
-    POLL_INTERVAL = 60 # 1 min
+    MAX_TIMEOUT_SECONDS = 1800
+    POLL_INTERVAL_SECONDS = 60
 
     def self.exit_on_failure?
       false
@@ -26,9 +26,9 @@ module Jiminy
                               desc: "The GitHub PR number"
     method_option :dry_run, type: :boolean, default: false, lazy_default: true,
                             desc: "Print to STDOUT instead of leaving a comment on GitHub"
-    method_option :timeout, type: :numeric, aliases: %w[max-timeout], default: MAX_TIMEOUT,
+    method_option :timeout, type: :numeric, aliases: %w[max-timeout], default: MAX_TIMEOUT_SECONDS,
                             desc: "How long to poll CircleCI before timing out (in seconds)"
-    method_option :poll_interval, type: :numeric, aliases: %w[poll-interval], default: POLL_INTERVAL,
+    method_option :poll_interval, type: :numeric, aliases: %w[poll-interval], default: POLL_INTERVAL_SECONDS,
                                   desc: "How frequently to poll CircleCI (in seconds)"
     method_option :source, type: :string, default: "circleci",
                            desc: "Where are the results.yml files we should report?"
@@ -49,7 +49,7 @@ module Jiminy
       attr_accessor :start_time
 
       def poll_interval
-        options[:poll_interval] || POLL_INTERVAL
+        options[:poll_interval] || POLL_INTERVAL_SECONDS
       end
 
       def source
@@ -57,7 +57,7 @@ module Jiminy
       end
 
       def max_timeout
-        options[:timeout] || MAX_TIMEOUT
+        options[:timeout] || MAX_TIMEOUT_SECONDS
       end
 
       def timed_out?
