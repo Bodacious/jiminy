@@ -44,9 +44,9 @@ module Jiminy
 
           private
 
-          def match_data
-            @_match_data ||= ensure_env_variable("CIRCLE_PULL_REQUEST").match(PR_URL_MATCHERS)
-          end
+            def match_data
+              @_match_data ||= ensure_env_variable("CIRCLE_PULL_REQUEST").match(PR_URL_MATCHERS)
+            end
         end
       end
     end

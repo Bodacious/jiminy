@@ -25,7 +25,7 @@ module Jiminy
         Reporters::DryRunReporter.new(header: COMMENT_HEADER, body: comment_content).report!
       else
         Reporters::GithubReporter.new(header: COMMENT_HEADER, body: comment_content,
-                                      pr_number: options[:pr_number]).report!
+          pr_number: options[:pr_number]).report!
       end
     end
   end

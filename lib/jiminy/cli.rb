@@ -19,26 +19,26 @@ module Jiminy
 
     desc "Report results", "Reports the results of tests"
     method_option :commit, type: :string, aliases: "c", required: true,
-                           banner: "3e078f8770743549b722382ec5d412a30b9fdcc5",
-                           desc: "The full SHA for the current HEAD commit"
-    method_option :pr_number, type: :numeric, aliases: %w[pr p], required: true,
-                              banner: "1",
-                              desc: "The GitHub PR number"
+      banner: "3e078f8770743549b722382ec5d412a30b9fdcc5",
+      desc: "The full SHA for the current HEAD commit"
+    method_option :pr_number, type: :numeric, aliases: %w(pr p), required: true,
+      banner: "1",
+      desc: "The GitHub PR number"
     method_option :dry_run, type: :boolean, default: false, lazy_default: true,
-                            desc: "Print to STDOUT instead of leaving a comment on GitHub"
-    method_option :timeout, type: :numeric, aliases: %w[max-timeout], default: MAX_TIMEOUT_SECONDS,
-                            desc: "How long to poll CircleCI before timing out (in seconds)"
-    method_option :poll_interval, type: :numeric, aliases: %w[poll-interval], default: POLL_INTERVAL_SECONDS,
-                                  desc: "How frequently to poll CircleCI (in seconds)"
+      desc: "Print to STDOUT instead of leaving a comment on GitHub"
+    method_option :timeout, type: :numeric, aliases: %w(max-timeout), default: MAX_TIMEOUT_SECONDS,
+      desc: "How long to poll CircleCI before timing out (in seconds)"
+    method_option :poll_interval, type: :numeric, aliases: %w(poll-interval), default: POLL_INTERVAL_SECONDS,
+      desc: "How frequently to poll CircleCI (in seconds)"
     method_option :source, type: :string, default: "circleci",
-                           desc: "Where are the results.yml files we should report?"
+      desc: "Where are the results.yml files we should report?"
     def report
       self.start_time = Time.now
       artifact_urls = artifacts.map(&:url)
 
       Jiminy::Reporting.report!(*artifact_urls,
-                                pr_number: options[:pr_number],
-                                dry_run: options[:dry_run])
+        pr_number: options[:pr_number],
+        dry_run: options[:dry_run])
 
       $stdout.puts "Reported N+1s successfully"
       exit(0)
@@ -84,7 +84,7 @@ module Jiminy
         end
       end
 
-      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+      # rubocop:disable Metrics/AbcSize
       def workflow
         @_workflow ||= begin
           result = CircleCI::Workflow.find(pipeline_id: pipeline.id, workflow_name: Jiminy.config.ci_workflow_name)
@@ -107,7 +107,7 @@ module Jiminy
           abort("Process timed out after #{Time.now - start_time} seconds")
         end
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength, Metrics/CyclomaticComplexity
+      # rubocop:enable Metrics/AbcSize
 
       def jobs
         @_jobs ||= CircleCI::Job.all(workflow_id: workflow.id)

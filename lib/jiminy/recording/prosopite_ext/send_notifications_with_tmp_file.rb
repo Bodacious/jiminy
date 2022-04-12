@@ -35,9 +35,9 @@ module Jiminy
 
         private
 
-        def tmp_file_recorder
-          @_tmp_file_recorder ||= TmpFileRecorder.new
-        end
+          def tmp_file_recorder
+            @_tmp_file_recorder ||= TmpFileRecorder.new
+          end
       end
     end
   end

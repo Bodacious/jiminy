@@ -12,3 +12,4 @@
 .byebug_history
 *.gem
 config
+.rubocop-https---raw-githubusercontent-com-cookpad-global-style-guides-main--rubocop-ruby-yml
