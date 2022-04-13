@@ -20,3 +20,9 @@ module Jiminy
     end
   end
 end
+RSpec.configure do |config|
+  config.before(:suite) { Jiminy.reset_results_file! }
+  config.around do |example|
+    Jiminy.wrap_rspec_example(example)
+  end
+end

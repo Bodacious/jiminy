@@ -17,23 +17,23 @@ module Jiminy
 
         private
 
-        def location_in_array?(location, array)
-          array.detect { |hash| hash.key?(location) }
-        end
+          def location_in_array?(location, array)
+            array.detect { |hash| hash.key?(location) }
+          end
 
-        def filepath_ignored?(filepath)
-          ignored_files.include?(filepath)
-        end
+          def filepath_ignored?(filepath)
+            ignored_files.include?(filepath)
+          end
 
-        def ignored_files
-          @_ignored_files ||= load_ignored_files
-        end
+          def ignored_files
+            @_ignored_files ||= load_ignored_files
+          end
 
-        def load_ignored_files
-          return [] unless File.exist?(Jiminy.config.ignore_file_path)
+          def load_ignored_files
+            return [] unless File.exist?(Jiminy.config.ignore_file_path)
 
-          YAML.load_file(Jiminy.config.ignore_file_path) || []
-        end
+            YAML.load_file(Jiminy.config.ignore_file_path) || []
+          end
       end
     end
   end

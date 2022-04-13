@@ -58,25 +58,25 @@ module Jiminy
 
     private
 
-    def defined_configs_with_defaults
-      self.class.defined_configs.select { |_config_name, options| options[:default] }
-    end
-
-    def required_configs
-      self.class.defined_configs.select { |_config_name, options| options[:required] }
-    end
-
-    def apply_defaults!
-      defined_configs_with_defaults.each do |config_name, options|
-        public_send(:"#{config_name}=", options[:default])
+      def defined_configs_with_defaults
+        self.class.defined_configs.select { |_config_name, options| options[:default] }
       end
-    end
 
-    def raise_missing_required(config_name)
-      return unless required_configs.key?(config_name)
+      def required_configs
+        self.class.defined_configs.select { |_config_name, options| options[:required] }
+      end
 
-      raise MissingConfigError, config_name
-    end
+      def apply_defaults!
+        defined_configs_with_defaults.each do |config_name, options|
+          public_send(:"#{config_name}=", options[:default])
+        end
+      end
+
+      def raise_missing_required(config_name)
+        return unless required_configs.key?(config_name)
+
+        raise MissingConfigError, config_name
+      end
   end
 
   module ConfigurationMethods

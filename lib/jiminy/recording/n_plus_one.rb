@@ -35,16 +35,16 @@ module Jiminy
 
       private
 
-      attr_reader :queries, :line, :method_name
+        attr_reader :queries, :line, :method_name
 
-      def attributes
-        {
-          "file" => file,
-          "line" => line,
-          "method" => method_name,
-          "examples" => queries.take(EXAMPLES_COUNT)
-        }
-      end
+        def attributes
+          {
+            "file" => file,
+            "line" => line,
+            "method" => method_name,
+            "examples" => queries.take(EXAMPLES_COUNT)
+          }
+        end
     end
   end
 end

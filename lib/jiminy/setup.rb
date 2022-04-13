@@ -5,6 +5,6 @@ require_relative "configuration"
 Jiminy.extend(Jiminy::ConfigurationMethods)
 
 begin
-  load "./config/initializers/jiminy.rb"
+  load "./config/jiminy.rb"
 rescue LoadError; nil
 end

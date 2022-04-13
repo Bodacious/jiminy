@@ -11,16 +11,16 @@ module Jiminy
 
       private
 
-      def _test_n_plus_one_detection
-        yield and return if Prosopite.scan?
+        def _test_n_plus_one_detection
+          yield and return if Prosopite.scan?
 
-        begin
-          Prosopite.scan
-          yield
-        ensure
-          Prosopite.finish
+          begin
+            Prosopite.scan
+            yield
+          ensure
+            Prosopite.finish
+          end
         end
-      end
     end
   end
 end
