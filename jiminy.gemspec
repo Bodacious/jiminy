@@ -2,6 +2,7 @@
 
 require_relative "lib/jiminy/version"
 
+# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |spec|
   spec.name          = "jiminy"
   spec.version       = Jiminy::VERSION
@@ -40,3 +41,4 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop-rspec", ">= 2", "< 3"
   spec.metadata["rubygems_mfa_required"] = "true"
 end
+# rubocop:enable Metrics/BlockLength
