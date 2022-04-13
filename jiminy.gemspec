@@ -31,14 +31,14 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_runtime_dependency "octokit", ">= 4", "< 5"
-  spec.add_runtime_dependency "prosopite", ">= 1", "< 2"
+  spec.add_runtime_dependency "octokit", ">= 4"
+  spec.add_runtime_dependency "prosopite", ">= 1"
   spec.add_runtime_dependency "rspec"
-  spec.add_runtime_dependency "thor", ">= 1.2", "< 2"
+  spec.add_runtime_dependency "thor", ">= 1.2"
   spec.add_development_dependency "byebug"
-  spec.add_development_dependency "rubocop", ">= 1", "< 2"
-  spec.add_development_dependency "rubocop-rake", ">= 0.6.0", "< 1"
-  spec.add_development_dependency "rubocop-rspec", ">= 2", "< 3"
+  spec.add_development_dependency "rubocop", ">= 1"
+  spec.add_development_dependency "rubocop-rake", ">= 0.6.0"
+  spec.add_development_dependency "rubocop-rspec", ">= 2"
   spec.metadata["rubygems_mfa_required"] = "true"
 end
 # rubocop:enable Metrics/BlockLength
