@@ -67,20 +67,6 @@ group :development, :test do
 end
 ```
 
-### Extending your test suite
-
-Add the following in `spec/support.rb`:
-
-``` ruby
-require "jiminy/rspec"
-
-RSpec.configure do |config|
-  config.before(:suite) { Jiminy.reset_results_file! }
-  config.around do |example|
-    Jiminy.wrap_rspec_example(example)
-  end
-end
-```
 
 ### Running the CLI
 
