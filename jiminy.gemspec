@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "octokit", ">= 4", "< 5"
   spec.add_runtime_dependency "prosopite", ">= 1", "< 2"
-  spec.add_runtime_dependency "rails", ">= 5", "< 7.2"
+  spec.add_runtime_dependency "rspec"
   spec.add_runtime_dependency "thor", ">= 1.2", "< 2"
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "rubocop", ">= 1", "< 2"
