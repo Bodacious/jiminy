@@ -5,6 +5,7 @@ module Jiminy
   require "byebug"
   class CLI < Thor
     require "jiminy/reporting/ci_providers/circle_ci"
+    include Thor::Actions
     include Jiminy::Reporting::CIProviders
 
     class WorkflowStillRunningError < StandardError; end
@@ -12,6 +13,8 @@ module Jiminy
 
     MAX_TIMEOUT_SECONDS = 1800
     POLL_INTERVAL_SECONDS = 60
+
+    source_root File.expand_path("templates/", __dir__)
 
     def self.exit_on_failure?
       false
@@ -42,6 +45,11 @@ module Jiminy
 
       $stdout.puts "Reported N+1s successfully"
       exit(0)
+    end
+
+    desc "Install Jiminy", "Installs jiminy configuration files in your app"
+    def init
+      template("config.rb", "./config/jiminy.rb")
     end
 
     # rubocop:disable Metrics/BlockLength
