@@ -67,6 +67,38 @@ group :development, :test do
 end
 ```
 
+Then run the following command:
+
+``` ruby
+$ bundle exec jiminy init
+```
+
+## Configuration
+
+The init command will add this file to your repo. Change the settings here to configure Jiminy:
+
+``` ruby
+# config/jiminy.rb
+Jiminy.configure do |config|
+  config.ci_workflow_name = "build_and_test"
+
+  config.project_username = "bodacious"
+
+  # NOTE: This is case sensitive on CircleCI
+  config.project_reponame = "jiminy"
+
+  config.circle_ci_api_token = ENV["CIRCLE_CI_API_TOKEN"]
+
+  config.github_token = ENV["GITHUB_TOKEN"]
+
+  # config.ignore_file_path =  File.join("./.jiminy_ignores.yml")
+
+  # config.temp_file_location = File.join("./tmp/jiminy/results.yml")
+end
+```
+
+_NOTE: This file must be named `config/jiminy.rb` or **the gem will not detect the configuration**._
+
 
 ### Running the CLI
 
@@ -99,32 +131,6 @@ Call the Jiminy CLI from a GitHub action:
   run: |
     bundle exec jiminy report --commit ${{ github.event.pull_request.head.sha }} --pr-number=$PR_NUMBER --poll-interval=15 --timeout=300
 ```
-
-## Configuration
-
-Add an initializer to your Rails initializers directory:
-
-``` ruby
-# config/initializers/jiminy.rb
-Jiminy.configure do |config|
-  config.ci_workflow_name = "build_and_test"
-
-  config.project_username = "bodacious"
-
-  # NOTE: This is case sensitive on CircleCI
-  config.project_reponame = "jiminy"
-
-  config.circle_ci_api_token = ENV["CIRCLE_CI_API_TOKEN"]
-
-  config.github_token = ENV["GITHUB_TOKEN"]
-
-  # config.ignore_file_path =  File.join("./.jiminy_ignores.yml")
-
-  # config.temp_file_location = File.join("./tmp/jiminy/results.yml")
-end
-```
-
-_NOTE: This file must be named `config/initializers/jiminy.rb` or **the gem will not detect the configuration**._
 
 ## Ignoring instances
 
