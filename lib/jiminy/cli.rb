@@ -2,7 +2,6 @@
 
 module Jiminy
   require "thor"
-  require "byebug"
   class CLI < Thor
     require "jiminy/reporting/ci_providers/circle_ci"
     include Thor::Actions
