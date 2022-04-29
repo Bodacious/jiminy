@@ -14,8 +14,8 @@ RSpec.describe Jiminy::Recording::NPlusOne do
           location_string => {
             "examples" => [],
             "file" => "app/views/users/_user.html.erb",
-            "line"=> "1",
-            "method" => "_app_views_users__user_html_erb__2366356888272897519_876440",
+            "line" => "1",
+            "method" => "_app_views_users__user_html_erb__2366356888272897519_876440"
           }
         })
       end
@@ -34,8 +34,8 @@ RSpec.describe Jiminy::Recording::NPlusOne do
           location_string => {
             "examples" => [],
             "file" => "app/models/admins/user.rb",
-            "line"=> "13",
-            "method" => "map",
+            "line" => "13",
+            "method" => "map"
           }
         })
       end
