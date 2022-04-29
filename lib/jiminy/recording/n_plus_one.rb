@@ -5,21 +5,19 @@ module Jiminy
     class NPlusOne
       attr_reader :file, :location
 
-      LOCATION_MATCHER = /(?<file>.+\.rb):
-        (?<line>\d+):in\s`
-        (?:block\sin\s)?
-        (?<method_name>.+)'
-      /x.freeze
+      LOCATION_REGEXP = /^(?<file>[\w_\-\/.]+\.e?rb):(?<line>\d+):in\s`(?:block\sin\s)?(?<method>.+)'/x.freeze
 
       EXAMPLES_COUNT = 3
 
       def initialize(location:, queries: [])
         @location = location.to_s.strip
         @queries = queries
-        match = location.match(LOCATION_MATCHER)
-        @line = match[:line]
-        @method_name = match[:method_name]
-        @file = match[:file]
+        match_result = location.match(LOCATION_REGEXP)
+
+        @file = match_result[:file]
+        @line = match_result[:line]
+        @method_name = match_result[:method]
+
         freeze
       end
 
