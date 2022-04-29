@@ -37,7 +37,6 @@ module Jiminy
     def report
       self.start_time = Time.now
       artifact_urls = artifacts.map(&:url)
-
       Jiminy::Reporting.report!(*artifact_urls,
         pr_number: options[:pr_number],
         dry_run: options[:dry_run])
@@ -134,8 +133,12 @@ module Jiminy
         Local::Artifact.all
       end
 
+      def test_job
+        @_test_job ||= jobs.detect { |job| job.name == Jiminy.config.ci_job_name }
+      end
+
       def artifacts_from_circle_ci
-        CircleCI::Artifact.all(job_number: jobs.first.job_number)
+        CircleCI::Artifact.all(job_number: test_job.job_number)
       end
       alias_method :artifacts_from_circleci, :artifacts_from_circle_ci
     end

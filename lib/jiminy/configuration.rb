@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "logger"
+
 module Jiminy
   class Configuration
     DEFAULT_CONFIG_READER = -> { instance_variable_get(:"@_#{__callee__}" || raise_missing_required(__callee__)) }
@@ -34,6 +36,8 @@ module Jiminy
       end
     end
 
+    define_config :ci_job_name, default: "test"
+
     define_config :ci_workflow_name, default: "build"
 
     define_config :circle_ci_api_token
@@ -41,6 +45,8 @@ module Jiminy
     define_config :github_token
 
     define_config :ignore_file_path, default: File.join("./jiminy_ignores.yml")
+
+    define_config :logger, default: Logger.new(IO::NULL)
 
     define_config :project_reponame
 
@@ -92,6 +98,10 @@ module Jiminy
 
     def configured?
       !!configuration
+    end
+
+    def logger
+      configuration.logger
     end
   end
 end
