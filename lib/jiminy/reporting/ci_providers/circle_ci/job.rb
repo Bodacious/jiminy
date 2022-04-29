@@ -5,7 +5,7 @@ module Jiminy
     module CIProviders
       module CircleCI
         class Job < Base
-          define_attribute_readers :job_number
+          define_attribute_readers :job_number, :name
 
           def self.all(workflow_id:)
             fetch_api_resource("workflow/#{workflow_id}/job")

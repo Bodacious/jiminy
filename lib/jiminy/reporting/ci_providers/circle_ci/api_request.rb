@@ -14,7 +14,7 @@ module Jiminy
           end
 
           def perform!
-            puts url
+            Jiminy.logger.debug("API request: #@url")
             response
           end
 

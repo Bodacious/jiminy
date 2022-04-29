@@ -7,8 +7,6 @@ module Jiminy
       require "yaml"
       require "jiminy/github_apiable"
 
-      class MissingFileError < StandardError; end
-
       include GithubAPIable
 
       INSTANCE_SEPARATOR = "\n"
@@ -54,17 +52,17 @@ module Jiminy
         end
 
         def build_comment_body
-          instances.map do |instance|
-            file = file_from_instance(instance)
+          Array(instances).map do |instance|
+            file = file_from_instance(instance) || next
             instance.blob_url = file.blob_url
             instance.to_markdown
-          end.join(INSTANCE_SEPARATOR)
+          end.compact.join(INSTANCE_SEPARATOR)
         end
 
         def file_from_instance(instance)
           client.pull_request_files(env_config.repo_path, pr_number).detect do |file|
             file.filename == instance.file
-          end or raise(MissingFileError)
+          end
         end
     end
   end
