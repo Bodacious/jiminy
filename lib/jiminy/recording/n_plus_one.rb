@@ -5,7 +5,7 @@ module Jiminy
     class NPlusOne
       attr_reader :file, :location
 
-      LOCATION_REGEXP = /^(?<file>[\w_\-\/.]+\.e?rb):(?<line>\d+):in\s`(?<method>.+)'/x.freeze
+      LOCATION_REGEXP = /^(?<file>[\w_\-\/.]+\.e?rb):(?<line>\d+):in\s`(?:block\sin\s)?(?<method>.+)'/x.freeze
 
       EXAMPLES_COUNT = 3
 
