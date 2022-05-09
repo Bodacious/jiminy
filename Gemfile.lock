@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    jiminy (0.1.0)
+    jiminy (0.1.1)
       octokit (>= 4)
       prosopite (>= 1)
       rspec
