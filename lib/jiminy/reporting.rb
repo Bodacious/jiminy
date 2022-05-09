@@ -21,6 +21,9 @@ module Jiminy
       comment_content = yaml_files.map do |yaml_file|
         YAMLFileCommentPresenter.new(source_filepath: yaml_file, pr_number: options[:pr_number]).to_s
       end.join(LINE_SEPARATOR)
+
+      return if comment_content.strip.empty?
+
       if options[:dry_run]
         Reporters::DryRunReporter.new(header: COMMENT_HEADER, body: comment_content).report!
       else
