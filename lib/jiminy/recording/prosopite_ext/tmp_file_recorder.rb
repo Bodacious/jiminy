@@ -6,6 +6,7 @@ module Jiminy
       class TmpFileRecorder
         require_relative "../n_plus_one"
 
+        # rubocop:disable Metrics/AbcSize
         def record(location:, queries:)
           yaml_content = File.read(Jiminy.config.temp_file_location)
           array = YAML.safe_load(yaml_content)
@@ -24,6 +25,7 @@ module Jiminy
           array << n_plus_one.to_h
           File.write(Jiminy.config.temp_file_location, array.to_yaml)
         end
+        # rubocop:enable Metrics/AbcSize
 
         private
 
