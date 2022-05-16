@@ -13,12 +13,12 @@ module Jiminy
           n_plus_one = NPlusOne.new(location: location, queries: queries)
 
           if filepath_ignored?(n_plus_one.file)
-            Jiminy.logger.debug("Ignoring n+1 instance #{n_plus_one}")
+            Jiminy.logger.debug { "Ignoring n+1 instance #{n_plus_one}" }
             return
           end
 
           if location_in_array?(location, array)
-            Jiminy.logger.debug("Already reported n+1 instance #{n_plus_one}")
+            Jiminy.logger.debug { "Already reported n+1 instance #{n_plus_one}" }
             return
           end
 
