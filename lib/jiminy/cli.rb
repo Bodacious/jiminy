@@ -4,6 +4,8 @@ module Jiminy
   require "thor"
   class CLI < Thor
     require "jiminy/reporting/ci_providers/circle_ci"
+    require "jiminy/cli/exit_codes"
+
     include Thor::Actions
     include Jiminy::Reporting::CIProviders
 
@@ -41,8 +43,7 @@ module Jiminy
         pr_number: options[:pr_number],
         dry_run: options[:dry_run])
 
-      $stdout.puts "Reported N+1s successfully"
-      exit(0)
+      finish(ExitCodes::Success)
     end
 
     desc "Install Jiminy", "Installs jiminy configuration files in your app"
@@ -53,6 +54,16 @@ module Jiminy
     # rubocop:disable Metrics/BlockLength
     no_tasks do
       attr_accessor :start_time
+
+      def finish(exit_code_klass, *args, **kwargs)
+        exit_code = exit_code_klass.new(*args, **kwargs)
+        if exit_code.value == 0
+          puts exit_code
+        else
+          warn exit_code
+        end
+        exit(exit_code.value)
+      end
 
       def poll_interval
         options[:poll_interval] || POLL_INTERVAL_SECONDS
@@ -80,7 +91,7 @@ module Jiminy
 
       def pipeline
         @_pipeline ||= CircleCI::Pipeline.find_by_revision(git_revision: git_revision, pr_number: pr_number) or
-          abort("No such Pipeline with commit SHA #{git_revision}")
+          finish(ExitCodes::PipelineNotFound, git_revision: git_revision)
       end
 
       def missing_options
@@ -95,14 +106,18 @@ module Jiminy
         @_workflow ||= begin
           result = CircleCI::Workflow.find(pipeline_id: pipeline.id, workflow_name: Jiminy.config.ci_workflow_name)
           if result.nil?
-            abort("Unable to find workflow called '#{Jiminy.config.ci_workflow_name}' in Pipeline #{pipeline.id}")
+            finish(ExitCodes::WorkflowNotFound,
+              workflow_name: Jiminy.config.ci_workflow_name,
+              pipeline_id: pipeline.id)
           end
 
           if result.not_run? || result.running?
             $stdout.puts "Workflow still running..."
             raise(WorkflowStillRunningError)
           end
-          abort("Workflow #{result.status}—aborting...") unless result.success?
+          unless result.success?
+            finish(ExitCodes::WorkflowNotSuccess, status: result.status)
+          end
 
           result
         rescue WorkflowStillRunningError
@@ -110,7 +125,7 @@ module Jiminy
           $stdout.puts "Retrying..."
           retry unless timed_out?
 
-          abort("Process timed out after #{Time.now - start_time} seconds")
+          finish(ExitCodes::ProcessTimeout, start_time: start_time)
         end
       end
       # rubocop:enable Metrics/AbcSize
