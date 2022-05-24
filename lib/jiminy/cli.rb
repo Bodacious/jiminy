@@ -115,8 +115,9 @@ module Jiminy
             $stdout.puts "Workflow still running..."
             raise(WorkflowStillRunningError)
           end
-          finish(ExitCodes::WorkflowNotSuccess,
-            status: result.status) unless result.success?
+          unless result.success?
+            finish(ExitCodes::WorkflowNotSuccess, status: result.status)
+          end
 
           result
         rescue WorkflowStillRunningError
