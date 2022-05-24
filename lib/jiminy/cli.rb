@@ -61,7 +61,7 @@ module Jiminy
           $stdout.puts e
           exit(e.value)
         else
-          $stderr.puts e
+          warn e
           abort(e.value)
         end
       end
@@ -92,7 +92,7 @@ module Jiminy
 
       def pipeline
         @_pipeline ||= CircleCI::Pipeline.find_by_revision(git_revision: git_revision, pr_number: pr_number) or
-                         finish(ExitCodes::PipelineNotFound.new(git_revision: git_revision))
+          finish(ExitCodes::PipelineNotFound.new(git_revision: git_revision))
       end
 
       def missing_options
@@ -107,7 +107,8 @@ module Jiminy
         @_workflow ||= begin
           result = CircleCI::Workflow.find(pipeline_id: pipeline.id, workflow_name: Jiminy.config.ci_workflow_name)
           if result.nil?
-            finish(ExitCodes::WorkflowNotFound.new(workflow_name: Jiminy.config.ci_workflow_name, pipeline_id: pipeline.id))
+            finish(ExitCodes::WorkflowNotFound.new(workflow_name: Jiminy.config.ci_workflow_name,
+              pipeline_id: pipeline.id))
           end
 
           if result.not_run? || result.running?
