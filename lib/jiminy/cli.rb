@@ -58,12 +58,11 @@ module Jiminy
       def finish(exit_code_klass, *args, **kwargs)
         exit_code = exit_code_klass.new(*args, **kwargs)
         if exit_code.value == 0
-          $stdout.puts exit_code
-          exit(exit_code.value)
+          puts exit_code
         else
           warn exit_code
-          abort(exit_code.value)
         end
+        exit(exit_code.value)
       end
 
       def poll_interval
