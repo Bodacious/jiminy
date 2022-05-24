@@ -55,14 +55,14 @@ module Jiminy
     no_tasks do
       attr_accessor :start_time
 
-      def finish(exit_code, *args, **kwargs)
-        e = exit_code.is_a?(ExitCodes::Base) ? exit_code : exit_code.new(*args, **kwargs)
-        if e.value == 0
-          $stdout.puts e
-          exit(e.value)
+      def finish(exit_code_klass, *args, **kwargs)
+        exit_code = exit_code_klass.new(*args, **kwargs)
+        if exit_code.value == 0
+          $stdout.puts exit_code
+          exit(exit_code.value)
         else
-          warn e
-          abort(e.value)
+          warn exit_code
+          abort(exit_code.value)
         end
       end
 
@@ -92,7 +92,7 @@ module Jiminy
 
       def pipeline
         @_pipeline ||= CircleCI::Pipeline.find_by_revision(git_revision: git_revision, pr_number: pr_number) or
-          finish(ExitCodes::PipelineNotFound.new(git_revision: git_revision))
+          finish(ExitCodes::PipelineNotFound, git_revision: git_revision)
       end
 
       def missing_options
@@ -107,15 +107,17 @@ module Jiminy
         @_workflow ||= begin
           result = CircleCI::Workflow.find(pipeline_id: pipeline.id, workflow_name: Jiminy.config.ci_workflow_name)
           if result.nil?
-            finish(ExitCodes::WorkflowNotFound.new(workflow_name: Jiminy.config.ci_workflow_name,
-              pipeline_id: pipeline.id))
+            finish(ExitCodes::WorkflowNotFound,
+              workflow_name: Jiminy.config.ci_workflow_name,
+              pipeline_id: pipeline.id)
           end
 
           if result.not_run? || result.running?
             $stdout.puts "Workflow still running..."
             raise(WorkflowStillRunningError)
           end
-          finish(ExitCodes::WorkflowNotSuccess.new(status: result.status)) unless result.success?
+          finish(ExitCodes::WorkflowNotSuccess,
+            status: result.status) unless result.success?
 
           result
         rescue WorkflowStillRunningError
@@ -123,7 +125,7 @@ module Jiminy
           $stdout.puts "Retrying..."
           retry unless timed_out?
 
-          finish(ExitCodes::ProcessTimeout.new(start_time: start_time))
+          finish(ExitCodes::ProcessTimeout, start_time: start_time)
         end
       end
       # rubocop:enable Metrics/AbcSize
