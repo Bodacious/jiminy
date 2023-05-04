@@ -44,7 +44,7 @@ module Jiminy
         end
 
         def file_content_for_remote_file(source_filepath)
-          URI.parse(source_filepath).open({ "Circle-Token" => ENV["CIRCLE_CI_API_TOKEN"] }).read
+          URI.parse(source_filepath).open({ "Circle-Token" => ENV.fetch("CIRCLE_CI_API_TOKEN", nil) }).read
         end
 
         def file_content_for_local_file(source_filepath)

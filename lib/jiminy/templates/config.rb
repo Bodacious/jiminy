@@ -5,9 +5,9 @@ Jiminy.configure do |config|
 
   config.project_reponame = Rails.application.name
 
-  config.circle_ci_api_token = ENV["CIRCLE_CI_API_TOKEN"]
+  config.circle_ci_api_token = ENV.fetch("CIRCLE_CI_API_TOKEN", nil)
 
-  config.github_token = ENV["GITHUB_TOKEN"]
+  config.github_token = ENV.fetch("GITHUB_TOKEN", nil)
 
   config.ignore_file_path = File.join("./.jiminy_ignores.yml")
 
