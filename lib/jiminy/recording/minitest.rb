@@ -14,6 +14,7 @@ module Jiminy
         super
         Prosopite.tmp_file = true
         ActionController::Base.include(Jiminy::Recording::TestControllerConcern)
+        ActionController::Api.include(Jiminy::Recording::TestControllerConcern)
       end
 
       def after_teardown

@@ -13,6 +13,7 @@ module Jiminy
       def wrap_rspec_example(example)
         Prosopite.tmp_file = true
         ActionController::Base.include(Jiminy::Recording::TestControllerConcern)
+        ActionController::Api.include(Jiminy::Recording::TestControllerConcern)
         example.run
         Prosopite.tmp_file = false
       end
